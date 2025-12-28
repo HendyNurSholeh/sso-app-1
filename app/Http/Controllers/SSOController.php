@@ -26,7 +26,7 @@ class SSOController extends Controller
 
     public function callback(Request $request)
     {
-        $response = Http::asForm()->post(
+        $token = Http::asForm()->post(
             config('services.keycloak.base_url')
             . '/realms/' . config('services.keycloak.realm')
             . '/protocol/openid-connect/token',
@@ -36,9 +36,11 @@ class SSOController extends Controller
                 'code'         => $request->code,
                 'redirect_uri' => url('/callback'),
             ]
-        );
+        )->json();
 
-        $token = $response->json();
+        session([
+            'id_token' => $token['id_token'],
+        ]);
 
         $userInfo = Http::withToken($token['access_token'])->get(
             config('services.keycloak.base_url')

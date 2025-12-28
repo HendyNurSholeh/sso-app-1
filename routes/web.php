@@ -18,14 +18,17 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/logout', function () {
+    $idToken = session('id_token');
     Auth::logout();
-
+    session()->invalidate();
+    session()->regenerateToken();
     $logoutUrl =
         config('services.keycloak.base_url')
         . '/realms/' . config('services.keycloak.realm')
         . '/protocol/openid-connect/logout'
-        . '?post_logout_redirect_uri=' . url('/');
-
+        . '?id_token_hint=' . $idToken
+        . '&post_logout_redirect_uri=' . urlencode(url('/'));
     return redirect($logoutUrl);
 });
+
 
