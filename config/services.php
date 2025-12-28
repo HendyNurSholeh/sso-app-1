@@ -36,9 +36,9 @@ return [
     ],
 
     'keycloak' => [
-        'base_url' => env('https://sso.tradersnextlevel.com'),
-        'realm'    => env('nextlevel'),
-        'client_id'=> env('web-app'),
+        'base_url' => env('KEYCLOAK_BASE_URL'),
+        'realm'    => env('KEYCLOAK_REALM'),
+        'client_id'=> env('KEYCLOAK_CLIENT_ID'),
     ],
 
 ];
