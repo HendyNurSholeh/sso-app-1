@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/logout', function () {
+
     $idToken = session('id_token');
     Auth::logout();
     session()->invalidate();
@@ -56,7 +57,7 @@ Route::post('/sso/backchannel-logout', function (Request $request) {
     session()->regenerateToken();
 
     return response()->json(['status' => 'logged_out']);
-});
+})->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 
 
